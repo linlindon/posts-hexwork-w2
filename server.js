@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 
 const headers = require('./headers');
 const errorHandler = require('./errorHandler');
+const successHandler = require('./successHandler');
 const Post = require('./models/posts');
 
 dotenv.config({path: './config.env'});
@@ -28,28 +29,16 @@ const requestListener = async(req, res) => {
 	if (req.url === '/posts' && req.method === 'GET') {
 		try {
 			const data = await Post.find();
-			res.writeHead(200, headers);
-			res.write(JSON.stringify({
-				"status": "success",
-				"data": data
-			}));
-			res.end();
+			successHandler(res, '取得所有 posts 成功', data);
 		} catch (err) {
 			errorHandler(res, err);
 		}
-		
 	} else if (req.url === '/posts' && req.method === 'POST') {
 		req.on('end', async() => {
 			try {
 				const data = JSON.parse(body);
-				await Post.create(data);
-
-				res.writeHead(200, headers);
-				res.write(JSON.stringify({
-					"status": "success",
-					"message": "Post created"
-				}));
-				res.end();
+				const newPost = await Post.create(data);
+				successHandler(res, '新增 post 成功', newPost);
 			} catch(err) {
 				errorHandler(res, err);
 			}
@@ -57,25 +46,16 @@ const requestListener = async(req, res) => {
 		
 	} else if (req.url === '/posts' && req.method === 'DELETE') {
 		try {
-			await Post.deleteMany();
-			res.writeHead(200, headers);
-			res.write(JSON.stringify({
-				"status": "success",
-				"message": "All posts deleted"
-			}));
+			const deletePosts = await Post.deleteMany();
+			successHandler(res, '刪除所有 posts 成功', deletePosts);
 		} catch(err) {
 			errorHandler(res, err);
 		}
 	} else if (req.url.includes('/posts/') && req.method === 'DELETE') {
 		const postId = urlParams[2];
 		try {
-			await Post.findByIdAndDelete(postId);
-			res.writeHead(200, headers);
-			res.write(JSON.stringify({
-				"status": "success",
-				"message": "Post deleted"
-			}));
-			res.end();
+			const deletePost = await Post.findByIdAndDelete(postId);
+			successHandler(res, '刪除 post 成功', deletePost);
 		} catch(err) {
 			errorHandler(res, err);
 		}
@@ -85,13 +65,8 @@ const requestListener = async(req, res) => {
 		req.on('end', async() => {
 			try {
 				const data = JSON.parse(body);
-				await Post.findByIdAndUpdate(postId, data);
-				res.writeHead(200, headers);
-				res.write(JSON.stringify({
-					"status": "success",
-					"message": "Post updated"
-				}));
-				res.end();
+				const updatePost = await Post.findByIdAndUpdate(postId, data);
+				successHandler(res, '更新 post 成功', updatePost);
 			} catch (err) {
 				errorHandler(res, err);
 			}
