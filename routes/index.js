@@ -1,27 +1,10 @@
-const http = require('http');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
+const headers = require('../service/headers');
+const errorHandler = require('../service/errorHandler');
+const successHandler = require('../service/successHandler');
+const Post = require('../models/posts');
 
-const headers = require('./headers');
-const errorHandler = require('./errorHandler');
-const successHandler = require('./successHandler');
-const Post = require('./models/posts');
-
-dotenv.config({path: './config.env'});
-
-const DB = process.env.DATABASE.replace('<password>', process.env.DATABASE_PASSWORD);
-
-mongoose.connect(DB)
-	.then(() => {
-		console.log('DB connection successful');
-	})
-	.catch((err) => {
-		console.log('DB connection failed', err);
-	})
-
-const requestListener = async(req, res) => {
+const routes = async(req, res) => {
 	const urlParams = req.url.split('/');
-	console.log('urlParams', urlParams);
 	let body = '';
 	req.on('data', chunk => {
 		body += chunk;
@@ -34,21 +17,21 @@ const requestListener = async(req, res) => {
 			errorHandler(res, err);
 		}
 	} else if (req.url === '/posts' && req.method === 'POST') {
-		req.on('end', async() => {
+		req.on('end', async () => {
 			try {
 				const data = JSON.parse(body);
 				const newPost = await Post.create(data);
 				successHandler(res, '新增 post 成功', newPost);
-			} catch(err) {
+			} catch (err) {
 				errorHandler(res, err);
 			}
 		})
-		
+
 	} else if (req.url === '/posts' && req.method === 'DELETE') {
 		try {
 			const deletePosts = await Post.deleteMany();
 			successHandler(res, '刪除所有 posts 成功', deletePosts);
-		} catch(err) {
+		} catch (err) {
 			errorHandler(res, err);
 		}
 	} else if (req.url.includes('/posts/') && req.method === 'DELETE') {
@@ -56,16 +39,16 @@ const requestListener = async(req, res) => {
 		try {
 			const deletePost = await Post.findByIdAndDelete(postId);
 			successHandler(res, '刪除 post 成功', deletePost);
-		} catch(err) {
+		} catch (err) {
 			errorHandler(res, err);
 		}
 	} else if (req.url.includes('/posts/') && req.method === 'PATCH') {
 		const postId = urlParams[2];
-		
-		req.on('end', async() => {
+
+		req.on('end', async () => {
 			try {
 				const data = JSON.parse(body);
-				const updatePost = await Post.findByIdAndUpdate(postId, data);
+				const updatePost = await Post.findByIdAndUpdate(postId, data, { runValidators: true, new: true });
 				successHandler(res, '更新 post 成功', updatePost);
 			} catch (err) {
 				errorHandler(res, err);
@@ -82,5 +65,4 @@ const requestListener = async(req, res) => {
 	}
 };
 
-const server = http.createServer(requestListener);
-server.listen(process.env.PORT || 3000);
+module.exports = routes;
