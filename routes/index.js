@@ -1,9 +1,5 @@
 const HttpController = require('../controllers/http');
 const postsController = require('../controllers/posts');
-const errorHandler = require('../service/errorHandler');
-const successHandler = require('../service/successHandler');
-const Post = require('../models/posts');
-const posts = require('../controllers/posts');
 
 const routes = async(req, res) => {
 	const { url, method } = req;

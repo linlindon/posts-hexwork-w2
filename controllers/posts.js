@@ -6,7 +6,6 @@ const posts = {
 	async getPosts(res) {
 		const data = await Post.find();
 		successHandler(res, '取得所有 posts 成功', data);
-		res.end();
 	},
 	async createPosts({req, res, body}) {
 		try {

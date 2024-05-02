@@ -1,0 +1,130 @@
+{
+	"info": {
+		"_postman_id": "a84b276a-ec26-420e-8040-b4ecad048a16",
+		"name": "postsCRUD - render",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19604000"
+	},
+	"item": [
+		{
+			"name": "get-all-posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://posts-hexwork-w2.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"posts-hexwork-w2",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add-new-post",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Render 新增文章測試100\",\n    \"content\": \"離職治百病\",\n    \"tags\": \"hush\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://posts-hexwork-w2.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"posts-hexwork-w2",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-all-posts",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://posts-hexwork-w2.onrender.com/posts",
+					"protocol": "https",
+					"host": [
+						"posts-hexwork-w2",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-post",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://posts-hexwork-w2.onrender.com/posts/662e583393514fcc9db6d",
+					"protocol": "https",
+					"host": [
+						"posts-hexwork-w2",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts",
+						"662e583393514fcc9db6d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "edit-post",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"render 更新測試文章1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://posts-hexwork-w2.onrender.com/posts/662de74e6009641c307cd54e",
+					"protocol": "https",
+					"host": [
+						"posts-hexwork-w2",
+						"onrender",
+						"com"
+					],
+					"path": [
+						"posts",
+						"662de74e6009641c307cd54e"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
